@@ -10,6 +10,7 @@ app.append(title);
 const searchBar = document.createElement("input");
 searchBar.type = "text";
 searchBar.placeholder = "Search...";
+searchBar.autocomplete = "off";
 searchBar.setAttribute("id", "searchBar");
 const board = document.createElement("div");
 board.setAttribute("id", "board");
@@ -64,7 +65,7 @@ searchBar.addEventListener("keyup", async (e) => {
     }
   }, 500);
 });
-searchBar.addEventListener("focus",()=>{
+searchBar.addEventListener("focus", () => {
   searchResult.style.display = "block";
 });
 document.addEventListener("click", (e) => {
@@ -80,8 +81,57 @@ function getResultBoard(result) {
     result.forEach((item) => {
       const resultHint = document.createElement("div");
       resultHint.setAttribute("class", "resultHint");
+
       resultHint.textContent = `${item.name}, ${item.country}`;
+      const lat = document.createElement("p");
+      lat.textContent = item.lat;
+      const lon = document.createElement("p");
+      lon.textContent = item.lon;
+     // resultHint.append(cityName, countryName);
       searchResult.append(resultHint);
+      resultHint.addEventListener("click", async () => {
+        console.log(resultHint);
+        console.log(lat, lon);
+        const res = await fetch(
+          `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat.textContent},${lon.textContent}&days=3&aqi=no&alerts=no`,
+        );
+        const data = await res.json();
+        console.log(data);
+        console.log(
+          data.current.condition.text,
+          data.current.temp_c,
+          data.current.temp_f,
+        );
+        const boardItem = document.createElement("div");
+        boardItem.setAttribute("class", "boardItem");
+        const boardItemFirst = document.createElement("div");
+        boardItemFirst.setAttribute("class", "boardItemFirst");
+        
+        const cityName = document.createElement("span");
+        cityName.setAttribute("class", "cityName");
+        cityName.textContent = data.location.name;
+        const tempC = document.createElement("span");
+        tempC.setAttribute("class", "tempC");
+        tempC.textContent = data.current.temp_c;
+        const tempF = document.createElement("span");
+        tempF.setAttribute("class", "tempF");
+        tempF.textContent = data.current.temp_f;
+        const boardItemSecond = document.createElement("div");
+        boardItemSecond.setAttribute("class", "boardItemSecond");
+        const countryName = document.createElement("span");
+        countryName.setAttribute("class", "countryName");
+        countryName.textContent = data.location.country;
+        const condition = document.createElement("span");
+        condition.setAttribute("class", "condition");
+        condition.textContent = data.current.condition.text;
+        boardItemFirst.append(cityName,tempC);
+        boardItemSecond.append(countryName,condition);
+        boardItem.append(boardItemFirst,boardItemSecond);
+        board.append(boardItem);
+
+      });
     });
   }
 }
+
+//adding result into the board

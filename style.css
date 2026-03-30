@@ -110,3 +110,47 @@
   background-color: white;
   border-radius: 5px;
 }
+.boardItem{
+  margin-top: 15px;
+  padding: 5px 10px;
+  height: 20%;
+  width: 100%;
+  background-color: bisque;
+  border-radius: 20px;
+}
+.countryName{
+ 
+  font-weight: 500;
+  font-size: 20px;
+}
+.cityName{
+  color: white;
+  font-weight: 500;
+  font-size: 40px;
+}
+.boardItemFirst{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tempC,.tempF{
+  color: white;
+  font-weight: 500;
+  font-size: 40px;
+}
+.tempC::after{
+  content:"°C"
+}
+.tempF::after{
+  content:"°F"
+}
+.boardItemSecond{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.condition{
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+}
