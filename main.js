@@ -57,6 +57,32 @@ changeUnit.addEventListener("click", (e) => {
     e.classList.toggle("tempFDis");
   });
 });
+
+deleteBtn.addEventListener("click", () => {
+  const getItems = document.querySelectorAll(".boardItem .deleteIcon");
+  console.log(getItems);
+  getItems.forEach((e) => {
+    e.classList.toggle("deleteIconShow");
+  });
+  if (deleteBtn.textContent === "Delete" && getItems.length !== 0) {
+    deleteBtn.textContent = "Done";
+  } else {
+    deleteBtn.textContent = "Delete";
+  }
+});
+board.addEventListener("click", (e) => {
+  console.log(e);
+  console.log(e.target);
+  console.log(e.target.closest("div"));
+  if (e.target.classList.contains("deleteIcon")) {
+    const deleteTarget = e.target.closest("div");
+
+    deleteTarget.remove();
+    if (board.innerHTML === "") {
+      deleteBtn.textContent = "Delete";
+    }
+  }
+});
 funcRow.append(deleteBtn, changeUnit);
 container.append(searchWrap, funcRow, board);
 const API_KEY = "06e03d2dd9ea477db7c210549262803";
@@ -124,7 +150,7 @@ function getResultBoard(result) {
           data.current.temp_f,
         );
         const boardItem = document.createElement("div");
-        boardItem.setAttribute("class", "boardItem");
+        boardItem.setAttribute("class", "boardItem delete");
         const boardItemFirst = document.createElement("div");
         boardItemFirst.setAttribute("class", "boardItemFirst");
 
@@ -147,7 +173,9 @@ function getResultBoard(result) {
         condition.setAttribute("class", "condition");
         condition.textContent = data.current.condition.text;
         const text = condition.textContent.toLowerCase();
-
+        const deleteIcon = document.createElement("button");
+        deleteIcon.textContent = "X";
+        deleteIcon.setAttribute("class", " deleteIcon");
         if (text.includes("sunny")) {
           boardItem.classList.add("sunny");
         } else if (
@@ -175,11 +203,11 @@ function getResultBoard(result) {
 
         boardItemFirst.append(cityName, tempC, tempF);
         boardItemSecond.append(countryName, condition);
-        boardItem.append(boardItemFirst, boardItemSecond);
+        boardItem.append(boardItemFirst, boardItemSecond, deleteIcon);
         board.append(boardItem);
         searchBar.value = "";
         searchResult.style.display = "none";
-        searchResult.innerHTML="";
+        searchResult.innerHTML = "";
       });
     });
   }
