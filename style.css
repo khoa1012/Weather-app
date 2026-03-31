@@ -115,7 +115,7 @@
   padding: 5px 10px;
   height: 20%;
   width: 100%;
-  background-color: bisque;
+  background-color: rgb(46, 128, 77);
   border-radius: 20px;
 }
 .countryName{
@@ -153,4 +153,19 @@
   color: white;
   font-weight: 500;
   font-size: 20px;
+}
+.sunny{
+  background-image: linear-gradient(rgb(65, 183, 238),rgb(224, 224, 93));
+}
+.cloud{
+  background-image: linear-gradient(rgb(89, 89, 95),rgb(170, 170, 164));
+}
+.clear{
+  background-image: linear-gradient(rgb(55, 55, 56),rgb(128, 107, 141));
+}
+.snow{
+  background-image: linear-gradient(rgb(237, 237, 238),rgb(177, 231, 233));
+}
+.rain{
+  background-image: linear-gradient(rgb(100, 154, 214),rgb(61, 147, 150));
 }

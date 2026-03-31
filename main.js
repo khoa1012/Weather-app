@@ -87,7 +87,7 @@ function getResultBoard(result) {
       lat.textContent = item.lat;
       const lon = document.createElement("p");
       lon.textContent = item.lon;
-     // resultHint.append(cityName, countryName);
+      // resultHint.append(cityName, countryName);
       searchResult.append(resultHint);
       resultHint.addEventListener("click", async () => {
         console.log(resultHint);
@@ -106,7 +106,7 @@ function getResultBoard(result) {
         boardItem.setAttribute("class", "boardItem");
         const boardItemFirst = document.createElement("div");
         boardItemFirst.setAttribute("class", "boardItemFirst");
-        
+
         const cityName = document.createElement("span");
         cityName.setAttribute("class", "cityName");
         cityName.textContent = data.location.name;
@@ -124,11 +124,74 @@ function getResultBoard(result) {
         const condition = document.createElement("span");
         condition.setAttribute("class", "condition");
         condition.textContent = data.current.condition.text;
-        boardItemFirst.append(cityName,tempC);
-        boardItemSecond.append(countryName,condition);
-        boardItem.append(boardItemFirst,boardItemSecond);
+        if (condition.textContent === "Sunny") {
+          boardItem.classList.add("sunny");
+        } else if (
+          condition.textContent === "Cloudy" ||
+          condition.textContent === "Overcast" ||
+          condition.textContent === "Mist" ||
+          condition.textContent === "Partly Cloudy" ||
+          condition.textContent === "Partly cloudy" ||
+          condition.textContent === "Fog"
+        ) {
+          boardItem.classList.add("cloud");
+        } else if (
+          condition.textContent === "Patchy rain possible" ||
+          condition.textContent === "Patchy rain nearby" ||
+          condition.textContent === "Patchy sleet possible" ||
+          condition.textContent === "Patchy freezing drizzle possible" ||
+          condition.textContent === "Thundery outbreaks possible" ||
+          condition.textContent === "Patchy light drizzle" ||
+          condition.textContent === "Light drizzle" ||
+          condition.textContent === "Freezing drizzle" ||
+          condition.textContent === "Heavy freezing drizzle" ||
+          condition.textContent === "Patchy light rain" ||
+          condition.textContent === "Light rain" ||
+          condition.textContent === "Moderate rain at times" ||
+          condition.textContent === "Moderate rain" ||
+          condition.textContent === "Heavy rain at times" ||
+          condition.textContent === "Heavy rain" ||
+          condition.textContent === "Light freezing rain" ||
+          condition.textContent === "Moderate or heavy freezing rain" ||
+          condition.textContent === "Light sleet" ||
+          condition.textContent === "Moderate or heavy sleet" ||
+          condition.textContent === "Light rain shower" ||
+          condition.textContent === "Moderate or heavy rain shower" ||
+          condition.textContent === "Torrential rain shower" ||
+          condition.textContent === "Light sleet showers" ||
+          condition.textContent === "Moderate or heavy sleet showers" ||
+          condition.textContent === "Light showers of ice pellets" ||
+          condition.textContent ===
+            "Moderate or heavy showers of ice pellets" ||
+          condition.textContent === "Patchy light rain with thunder" ||
+          condition.textContent === "Moderate or heavy rain with thunder"
+        ) {
+          boardItem.classList.add("rain");
+        } else if (condition.textContent === "Clear") {
+          boardItem.classList.add("clear");
+        } else if (
+          condition.textContent === "Patchy snow possible" ||
+          condition.textContent === "Blizzard" ||
+          condition.textContent === "Blowing snow" ||
+          condition.textContent === "Freezing fog" ||
+          condition.textContent === "Patchy light snow" ||
+          condition.textContent === "Light snow" ||
+          condition.textContent === "Patchy moderate snow" ||
+          condition.textContent === "Moderate snow" ||
+          condition.textContent === "Patchy heavy snow" ||
+          condition.textContent === "Heavy snow" ||
+          condition.textContent === "Ice pellets" ||
+          condition.textContent === "Light snow showers" ||
+          condition.textContent === "Moderate or heavy snow showers" ||
+          condition.textContent === "Patchy light snow with thunder" ||
+          condition.textContent === "Moderate or heavy snow with thunder"
+        ) {
+          boardItem.classList.add("snow");
+        }
+        boardItemFirst.append(cityName, tempC);
+        boardItemSecond.append(countryName, condition);
+        boardItem.append(boardItemFirst, boardItemSecond);
         board.append(boardItem);
-
       });
     });
   }
