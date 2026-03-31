@@ -37,7 +37,28 @@ searchIcon.setAttribute("class", "fa-solid fa-magnifying-glass searchIcon");
 const searchResult = document.createElement("div");
 searchResult.setAttribute("id", "searchResult");
 searchWrap.append(searchBar, searchIcon, searchResult);
-container.append(searchWrap, board);
+const funcRow = document.createElement("div");
+funcRow.setAttribute("id", "funcRow");
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "Delete";
+deleteBtn.setAttribute("class", "deleteBtn btn");
+const changeUnit = document.createElement("button");
+changeUnit.textContent = "°C <> °F";
+changeUnit.setAttribute("class", "changeUnit btn");
+
+changeUnit.addEventListener("click", (e) => {
+  const cDegree = document.querySelectorAll(".boardItem .tempC");
+  const fDegree = document.querySelectorAll(".boardItem .tempF");
+
+  cDegree.forEach((e) => {
+    e.classList.toggle("tempCDis");
+  });
+  fDegree.forEach((e) => {
+    e.classList.toggle("tempFDis");
+  });
+});
+funcRow.append(deleteBtn, changeUnit);
+container.append(searchWrap, funcRow, board);
 const API_KEY = "06e03d2dd9ea477db7c210549262803";
 async function findPlace(keyword) {
   const res = await fetch(
@@ -114,8 +135,9 @@ function getResultBoard(result) {
         tempC.setAttribute("class", "tempC");
         tempC.textContent = data.current.temp_c;
         const tempF = document.createElement("span");
-        tempF.setAttribute("class", "tempF");
+        tempF.setAttribute("class", "tempF tempFDis");
         tempF.textContent = data.current.temp_f;
+
         const boardItemSecond = document.createElement("div");
         boardItemSecond.setAttribute("class", "boardItemSecond");
         const countryName = document.createElement("span");
@@ -124,74 +146,40 @@ function getResultBoard(result) {
         const condition = document.createElement("span");
         condition.setAttribute("class", "condition");
         condition.textContent = data.current.condition.text;
-        if (condition.textContent === "Sunny") {
+        const text = condition.textContent.toLowerCase();
+
+        if (text.includes("sunny")) {
           boardItem.classList.add("sunny");
         } else if (
-          condition.textContent === "Cloudy" ||
-          condition.textContent === "Overcast" ||
-          condition.textContent === "Mist" ||
-          condition.textContent === "Partly Cloudy" ||
-          condition.textContent === "Partly cloudy" ||
-          condition.textContent === "Fog"
+          text.includes("cloud") ||
+          text.includes("overcast") ||
+          text.includes("fog") ||
+          text.includes("mist")
         ) {
           boardItem.classList.add("cloud");
         } else if (
-          condition.textContent === "Patchy rain possible" ||
-          condition.textContent === "Patchy rain nearby" ||
-          condition.textContent === "Patchy sleet possible" ||
-          condition.textContent === "Patchy freezing drizzle possible" ||
-          condition.textContent === "Thundery outbreaks possible" ||
-          condition.textContent === "Patchy light drizzle" ||
-          condition.textContent === "Light drizzle" ||
-          condition.textContent === "Freezing drizzle" ||
-          condition.textContent === "Heavy freezing drizzle" ||
-          condition.textContent === "Patchy light rain" ||
-          condition.textContent === "Light rain" ||
-          condition.textContent === "Moderate rain at times" ||
-          condition.textContent === "Moderate rain" ||
-          condition.textContent === "Heavy rain at times" ||
-          condition.textContent === "Heavy rain" ||
-          condition.textContent === "Light freezing rain" ||
-          condition.textContent === "Moderate or heavy freezing rain" ||
-          condition.textContent === "Light sleet" ||
-          condition.textContent === "Moderate or heavy sleet" ||
-          condition.textContent === "Light rain shower" ||
-          condition.textContent === "Moderate or heavy rain shower" ||
-          condition.textContent === "Torrential rain shower" ||
-          condition.textContent === "Light sleet showers" ||
-          condition.textContent === "Moderate or heavy sleet showers" ||
-          condition.textContent === "Light showers of ice pellets" ||
-          condition.textContent ===
-            "Moderate or heavy showers of ice pellets" ||
-          condition.textContent === "Patchy light rain with thunder" ||
-          condition.textContent === "Moderate or heavy rain with thunder"
+          text.includes("rain") ||
+          text.includes("drizzle") ||
+          text.includes("thunder")
         ) {
           boardItem.classList.add("rain");
-        } else if (condition.textContent === "Clear") {
-          boardItem.classList.add("clear");
         } else if (
-          condition.textContent === "Patchy snow possible" ||
-          condition.textContent === "Blizzard" ||
-          condition.textContent === "Blowing snow" ||
-          condition.textContent === "Freezing fog" ||
-          condition.textContent === "Patchy light snow" ||
-          condition.textContent === "Light snow" ||
-          condition.textContent === "Patchy moderate snow" ||
-          condition.textContent === "Moderate snow" ||
-          condition.textContent === "Patchy heavy snow" ||
-          condition.textContent === "Heavy snow" ||
-          condition.textContent === "Ice pellets" ||
-          condition.textContent === "Light snow showers" ||
-          condition.textContent === "Moderate or heavy snow showers" ||
-          condition.textContent === "Patchy light snow with thunder" ||
-          condition.textContent === "Moderate or heavy snow with thunder"
+          text.includes("snow") ||
+          text.includes("ice") ||
+          text.includes("blizzard")
         ) {
           boardItem.classList.add("snow");
+        } else if (text.includes("clear")) {
+          boardItem.classList.add("clear");
         }
-        boardItemFirst.append(cityName, tempC);
+
+        boardItemFirst.append(cityName, tempC, tempF);
         boardItemSecond.append(countryName, condition);
         boardItem.append(boardItemFirst, boardItemSecond);
         board.append(boardItem);
+        searchBar.value = "";
+        searchResult.style.display = "none";
+        searchResult.innerHTML="";
       });
     });
   }
