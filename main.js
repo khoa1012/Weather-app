@@ -81,6 +81,34 @@ board.addEventListener("click", (e) => {
     if (board.innerHTML === "") {
       deleteBtn.textContent = "Delete";
     }
+    return;
+  }
+  const itemTarget = e.target.closest(".boardItem");
+
+  if (itemTarget) {
+    console.log(itemTarget);
+    if (!itemTarget.classList.contains("view")) {
+      itemTarget.classList.add("view");
+      itemTarget.classList.add("popup");
+      console.log(board.getBoundingClientRect().top);
+      console.log(itemTarget.getBoundingClientRect().top);
+      const distance =
+        itemTarget.getBoundingClientRect().top -
+        board.getBoundingClientRect().top;
+      console.log(distance);
+      itemTarget.style.setProperty("--startY", `${distance}px`);
+      const testBtn = document.createElement("button");
+      testBtn.setAttribute("class", "btn goBack");
+      testBtn.textContent = "goback";
+      itemTarget.append(testBtn);
+      board.style.overflow = "hidden";
+    }
+  }
+  if (e.target.classList.contains("goBack")) {
+    const backTarget = e.target.closest(".boardItem");
+    backTarget.classList.remove("popup", "view");
+    console.log("at here");
+    board.style.overflow = "auto";
   }
 });
 funcRow.append(deleteBtn, changeUnit);
@@ -204,6 +232,9 @@ function getResultBoard(result) {
         boardItemFirst.append(cityName, tempC, tempF);
         boardItemSecond.append(countryName, condition);
         boardItem.append(boardItemFirst, boardItemSecond, deleteIcon);
+        if (deleteBtn.textContent === "Done") {
+          deleteIcon.classList.toggle("deleteIconShow");
+        }
         board.append(boardItem);
         searchBar.value = "";
         searchResult.style.display = "none";

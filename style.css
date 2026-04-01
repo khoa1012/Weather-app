@@ -35,6 +35,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .appDayColor {
   background-image: linear-gradient(rgb(114, 163, 236), white);
@@ -108,8 +109,9 @@
   height: 600px;
   width: 100%;
   min-width: 350px;
-  border-radius: 5px;
+  border-radius: 20px;
   overflow-x: auto;
+  position: relative;
 }
 .boardItem {
   margin-top: 15px;
@@ -230,4 +232,18 @@
 }
 .btn:active{
   transform: scale(1);
+}
+
+.popup{
+  position: absolute;
+  z-index: 2;
+  transform-origin: bottom;
+  animation: show 0.4s linear forwards;
+}
+@keyframes show{
+  to{transform: translateY(calc(-1* var(--startY))) ;height: 100%;}
+}
+
+@keyframes back{
+  to{transform: translateY(calc( var(--startY))) ;height: 20%;}
 }
