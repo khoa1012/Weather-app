@@ -97,10 +97,10 @@ board.addEventListener("click", async (e) => {
         board.getBoundingClientRect().top;
       console.log(distance);
       itemTarget.style.setProperty("--startY", `${distance}px`);
-      const testBtn = document.createElement("button");
-      testBtn.setAttribute("class", "btn goBack");
-      testBtn.textContent = "goback";
 
+      const testBtn = document.createElement("i");
+
+      testBtn.setAttribute("class", "fa-solid fa-arrow-left goBack");
       board.style.overflow = "hidden";
       itemTarget.style.overflow = "hidden";
       const firstRow = itemTarget.querySelector(".boardItemFirst");
@@ -114,28 +114,63 @@ board.addEventListener("click", async (e) => {
       const currentRes = await fetch(
         `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${currentLat.textContent},${currentLon.textContent}&days=3&aqi=no&alerts=no`,
       );
+      if (!currentRes.ok) {
+        throw new Error(
+          "something wrong when fetching when click on boardItem",
+        );
+      }
       const data = await currentRes.json();
       console.log(data);
       const itemTempC = document.createElement("span");
-      itemTempC.setAttribute("class","itemTempC");
+      itemTempC.setAttribute("class", "itemTempC");
       itemTempC.textContent = data.current.temp_c;
       const itemTempF = document.createElement("span");
       itemTempF.textContent = data.current.temp_f;
-      itemTempF.setAttribute("class","itemTempF itemTempFDis");
+      itemTempF.setAttribute("class", "itemTempF itemTempFDis");
       const tempRow = document.createElement("div");
-      tempRow.setAttribute("class","tempRow");
-      tempRow.append(itemTempC,itemTempF);
+      tempRow.setAttribute("class", "tempRow");
+      tempRow.append(itemTempC, itemTempF);
       const detailCity = document.createElement("h2");
-      detailCity.setAttribute("class","detailCity");
+      detailCity.setAttribute("class", "detailCity");
       detailCity.textContent = data.location.name;
-      const detailCond = data.current.condition.text;
+      const detailCond = document.createElement("h2");
+      detailCond.setAttribute("class", "detailCond");
+      detailCond.textContent = data.current.condition.text;
       const detailData = document.createElement("div");
-      detailData.setAttribute("class","detailData");
-      detailData.append(detailCity,tempRow);
+      detailData.setAttribute("class", "detailData");
+      const highTemp = document.createElement("div");
+      highTemp.setAttribute("class", "highTemp");
+      const lowTemp = document.createElement("div");
+      lowTemp.setAttribute("class", "lowTemp");
+      const highInitial = document.createElement("span");
+      highInitial.setAttribute("class", "highInitial");
+      highInitial.textContent = `H: `;
+      const lowInitial = document.createElement("span");
+      lowInitial.setAttribute("class", "lowInitial");
+      lowInitial.textContent = `L: `;
+      const highC = document.createElement("span");
+      highC.setAttribute("class", "highC");
+      const highF = document.createElement("span");
+      highF.setAttribute("class", "highF highFDis");
+      const lowC = document.createElement("span");
+      lowC.setAttribute("class", "lowC");
+      const lowF = document.createElement("span");
+      lowF.setAttribute("class", "lowF lowFDis");
+      highC.textContent = data.forecast.forecastday[0].day.maxtemp_c;
+      lowC.textContent = data.forecast.forecastday[0].day.mintemp_c;
+      highF.textContent = data.forecast.forecastday[0].day.maxtemp_f;
+      lowF.textContent = data.forecast.forecastday[0].day.mintemp_f;
+      const highLowTempRow = document.createElement("div");
+      highLowTempRow.setAttribute("class", "highLowTempRow");
+      highTemp.append(highInitial, highC, highF);
+      lowTemp.append(lowInitial, lowC, lowF);
+      highLowTempRow.append(highTemp, lowTemp);
+      detailData.append(detailCity, tempRow, detailCond, highLowTempRow);
       itemTarget.append(detailData);
-      
+      itemTarget.querySelector(".goBack").classList.add("moveUp");
+      itemTarget.querySelector(".detailData").classList.add("moveUp");
+      itemTarget.style.cursor = "auto";
     }
-
   }
   if (e.target.classList.contains("goBack")) {
     const backTarget = e.target.closest(".boardItem");
@@ -151,6 +186,7 @@ board.addEventListener("click", async (e) => {
     backBtn.remove();
     removeData.remove();
     board.style.overflow = "auto";
+    itemTarget.style.cursor = "pointer";
   }
 });
 funcRow.append(deleteBtn, changeUnit);
@@ -214,6 +250,11 @@ function getResultBoard(result) {
         const res = await fetch(
           `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat.textContent},${lon.textContent}&days=3&aqi=no&alerts=no`,
         );
+        if (!res.ok) {
+          throw new Error(
+            "something wrong when fetching when adding boardItem",
+          );
+        }
         const data = await res.json();
         console.log(data);
         console.log(
@@ -231,10 +272,10 @@ function getResultBoard(result) {
         cityName.textContent = data.location.name;
         const tempC = document.createElement("span");
         tempC.setAttribute("class", "tempC");
-        tempC.textContent = data.current.temp_c;
+        tempC.textContent = Math.round(data.current.temp_c);
         const tempF = document.createElement("span");
         tempF.setAttribute("class", "tempF tempFDis");
-        tempF.textContent = data.current.temp_f;
+        tempF.textContent = Math.round(data.current.temp_f);
 
         const boardItemSecond = document.createElement("div");
         boardItemSecond.setAttribute("class", "boardItemSecond");

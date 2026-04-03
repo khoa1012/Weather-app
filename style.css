@@ -163,7 +163,7 @@
   font-size: 40px;
 }
 .tempFDis,
-.itemTempFDis {
+.itemTempFDis,.highFDis,.lowFDis {
   display: none;
 }
 .tempCDis,
@@ -244,13 +244,20 @@
   animation: show 0.4s linear forwards;
 }
 .noShow {
-  animation: disappear 0.3s linear forwards;
+  animation: goUp 0.3s linear forwards;
 }
 .lat,
 .lon {
   display: none;
 }
 .goBack {
+  font-size: 28px;
+  padding: 5px;
+  color: white;
+  border-radius: 50%;
+  border: 2px solid white;
+  opacity: 0;
+  cursor: pointer;
 }
 .detailData {
   width: 100%;
@@ -260,6 +267,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  opacity: 0;
 }
 .itemTempC,
 .itemTempF {
@@ -272,7 +280,31 @@
   font-weight: 300;
   font-size: 24px;
 }
+.detailCond{
+  color: white;
+  font-weight: 300;
+  font-size: 20px;
+}
 
+.highInitial,.lowInitial,.highC,.highF,.lowC,.lowF{
+  color: white;
+  font-weight: 300;
+  font-size: 20px;
+}
+.highLowTempRow{
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.highTemp,.lowTemp{
+  height: 100%;
+  width: 20%;
+  text-align: center;
+}
+.moveUp{
+  animation: moveUp 1s ease forwards;
+}
 /* Keyframes */
 @keyframes show {
   to {
@@ -288,9 +320,16 @@
   }
 }
 
-@keyframes disappear {
+@keyframes goUp {
   to {
     opacity: 0;
     transform: translateY(calc(-1 * 120px));
+  }
+}
+@keyframes moveUp {
+  
+  to {
+    opacity: 10;
+    transform: translateY(calc(-1 * 70px));
   }
 }
