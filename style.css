@@ -123,7 +123,7 @@
   cursor: pointer;
   position: relative;
 }
-.deleteIcon{
+.deleteIcon {
   position: absolute;
   color: rgb(255, 255, 255);
   background-color: rgb(206, 91, 91);
@@ -135,10 +135,10 @@
   text-align: center;
   display: none;
 }
-.deleteIconShow{
+.deleteIconShow {
   display: block;
 }
-.deleteIcon:hover{
+.deleteIcon:hover {
   background-color: rgb(160, 70, 70);
 }
 .countryName {
@@ -162,16 +162,20 @@
   font-weight: 500;
   font-size: 40px;
 }
-.tempFDis{
+.tempFDis,
+.itemTempFDis {
   display: none;
 }
-.tempCDis{
+.tempCDis,
+.itemTempCDis {
   display: none;
 }
-.tempC::after {
+.tempC::after,
+.itemTempC::after {
   content: "°C";
 }
-.tempF::after {
+.tempF::after,
+.itemTempF::after {
   content: "°F";
 }
 .boardItemSecond {
@@ -215,35 +219,78 @@
 #board::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
-#funcRow{
+#funcRow {
   height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
-.btn{
+.btn {
   padding: 5px 10px;
   width: 90px;
-  
 }
-.btn:hover{
+.btn:hover {
   transform: scale(1.1);
 }
-.btn:active{
+.btn:active {
   transform: scale(1);
 }
 
-.popup{
+.popup {
   position: absolute;
   z-index: 2;
   transform-origin: bottom;
   animation: show 0.4s linear forwards;
 }
-@keyframes show{
-  to{transform: translateY(calc(-1* var(--startY))) ;height: 100%;}
+.noShow {
+  animation: disappear 0.3s linear forwards;
+}
+.lat,
+.lon {
+  display: none;
+}
+.goBack {
+}
+.detailData {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+.itemTempC,
+.itemTempF {
+  color: white;
+  font-weight: 500;
+  font-size: 64px;
+}
+.detailCity{
+  color: white;
+  font-weight: 300;
+  font-size: 24px;
 }
 
-@keyframes back{
-  to{transform: translateY(calc( var(--startY))) ;height: 20%;}
+/* Keyframes */
+@keyframes show {
+  to {
+    transform: translateY(calc(-1 * var(--startY)));
+    height: 100%;
+  }
+}
+
+@keyframes back {
+  to {
+    transform: translateY(calc(var(--startY)));
+    height: 20%;
+  }
+}
+
+@keyframes disappear {
+  to {
+    opacity: 0;
+    transform: translateY(calc(-1 * 120px));
+  }
 }

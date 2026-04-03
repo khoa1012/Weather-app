@@ -70,7 +70,7 @@ deleteBtn.addEventListener("click", () => {
     deleteBtn.textContent = "Delete";
   }
 });
-board.addEventListener("click", (e) => {
+board.addEventListener("click", async (e) => {
   console.log(e);
   console.log(e.target);
   console.log(e.target.closest("div"));
@@ -100,14 +100,56 @@ board.addEventListener("click", (e) => {
       const testBtn = document.createElement("button");
       testBtn.setAttribute("class", "btn goBack");
       testBtn.textContent = "goback";
-      itemTarget.append(testBtn);
+
       board.style.overflow = "hidden";
+      itemTarget.style.overflow = "hidden";
+      const firstRow = itemTarget.querySelector(".boardItemFirst");
+      const secondRow = itemTarget.querySelector(".boardItemSecond");
+      const currentLat = secondRow.querySelector(".lat");
+      const currentLon = secondRow.querySelector(".lon");
+      firstRow.classList.add("noShow");
+      secondRow.classList.add("noShow");
+      itemTarget.append(testBtn);
+
+      const currentRes = await fetch(
+        `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${currentLat.textContent},${currentLon.textContent}&days=3&aqi=no&alerts=no`,
+      );
+      const data = await currentRes.json();
+      console.log(data);
+      const itemTempC = document.createElement("span");
+      itemTempC.setAttribute("class","itemTempC");
+      itemTempC.textContent = data.current.temp_c;
+      const itemTempF = document.createElement("span");
+      itemTempF.textContent = data.current.temp_f;
+      itemTempF.setAttribute("class","itemTempF itemTempFDis");
+      const tempRow = document.createElement("div");
+      tempRow.setAttribute("class","tempRow");
+      tempRow.append(itemTempC,itemTempF);
+      const detailCity = document.createElement("h2");
+      detailCity.setAttribute("class","detailCity");
+      detailCity.textContent = data.location.name;
+      const detailCond = data.current.condition.text;
+      const detailData = document.createElement("div");
+      detailData.setAttribute("class","detailData");
+      detailData.append(detailCity,tempRow);
+      itemTarget.append(detailData);
+      
     }
+
   }
   if (e.target.classList.contains("goBack")) {
     const backTarget = e.target.closest(".boardItem");
     backTarget.classList.remove("popup", "view");
+    const firstRow = backTarget.querySelector(".boardItemFirst");
+    const secondRow = backTarget.querySelector(".boardItemSecond");
+
+    firstRow.classList.remove("noShow");
+    secondRow.classList.remove("noShow");
     console.log("at here");
+    const backBtn = backTarget.querySelector(".goBack");
+    const removeData = backTarget.querySelector(".detailData");
+    backBtn.remove();
+    removeData.remove();
     board.style.overflow = "auto";
   }
 });
@@ -160,8 +202,10 @@ function getResultBoard(result) {
       resultHint.textContent = `${item.name}, ${item.country}`;
       const lat = document.createElement("p");
       lat.textContent = item.lat;
+      lat.setAttribute("class", "lat");
       const lon = document.createElement("p");
       lon.textContent = item.lon;
+      lon.setAttribute("class", "lon");
       // resultHint.append(cityName, countryName);
       searchResult.append(resultHint);
       resultHint.addEventListener("click", async () => {
@@ -230,7 +274,7 @@ function getResultBoard(result) {
         }
 
         boardItemFirst.append(cityName, tempC, tempF);
-        boardItemSecond.append(countryName, condition);
+        boardItemSecond.append(countryName, condition, lat, lon);
         boardItem.append(boardItemFirst, boardItemSecond, deleteIcon);
         if (deleteBtn.textContent === "Done") {
           deleteIcon.classList.toggle("deleteIconShow");
