@@ -167,7 +167,7 @@
   display: none;
 }
 .tempCDis,
-.itemTempCDis {
+.itemTempCDis,.highCDis,.lowCDis {
   display: none;
 }
 .tempC::after,

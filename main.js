@@ -49,13 +49,29 @@ changeUnit.setAttribute("class", "changeUnit btn");
 changeUnit.addEventListener("click", (e) => {
   const cDegree = document.querySelectorAll(".boardItem .tempC");
   const fDegree = document.querySelectorAll(".boardItem .tempF");
-
+  const detailTempC = document.querySelector(".itemTempC");
+  const detailTempF = document.querySelector(".itemTempF");
+  const highTempC = document.querySelector(".highC");
+  const highTempF = document.querySelector(".highF");
+  const lowTempC = document.querySelector(".lowC");
+  const lowTempF = document.querySelector(".lowF");
   cDegree.forEach((e) => {
     e.classList.toggle("tempCDis");
   });
   fDegree.forEach((e) => {
     e.classList.toggle("tempFDis");
   });
+  if(detailTempC) detailTempC.classList.toggle("itemTempCDis");
+
+  if(detailTempF)detailTempF.classList.toggle("itemTempFDis");
+
+  if(highTempC)highTempC.classList.toggle("highCDis");
+
+  if(highTempF)highTempF.classList.toggle("highFDis");
+
+  if(lowTempC)lowTempC.classList.toggle("lowCDis");
+
+  if(lowTempF)lowTempF.classList.toggle("lowFDis");
 });
 
 deleteBtn.addEventListener("click", () => {
@@ -123,9 +139,9 @@ board.addEventListener("click", async (e) => {
       console.log(data);
       const itemTempC = document.createElement("span");
       itemTempC.setAttribute("class", "itemTempC");
-      itemTempC.textContent = data.current.temp_c;
+      itemTempC.textContent = Math.round(data.current.temp_c);
       const itemTempF = document.createElement("span");
-      itemTempF.textContent = data.current.temp_f;
+      itemTempF.textContent = Math.round(data.current.temp_f);
       itemTempF.setAttribute("class", "itemTempF itemTempFDis");
       const tempRow = document.createElement("div");
       tempRow.setAttribute("class", "tempRow");
@@ -156,15 +172,21 @@ board.addEventListener("click", async (e) => {
       lowC.setAttribute("class", "lowC");
       const lowF = document.createElement("span");
       lowF.setAttribute("class", "lowF lowFDis");
-      highC.textContent = data.forecast.forecastday[0].day.maxtemp_c;
-      lowC.textContent = data.forecast.forecastday[0].day.mintemp_c;
-      highF.textContent = data.forecast.forecastday[0].day.maxtemp_f;
-      lowF.textContent = data.forecast.forecastday[0].day.mintemp_f;
+      highC.textContent = Math.round(data.forecast.forecastday[0].day.maxtemp_c);
+      lowC.textContent = Math.round(data.forecast.forecastday[0].day.mintemp_c);
+      highF.textContent = Math.round(data.forecast.forecastday[0].day.maxtemp_f);
+      lowF.textContent = Math.round(data.forecast.forecastday[0].day.mintemp_f);
       const highLowTempRow = document.createElement("div");
       highLowTempRow.setAttribute("class", "highLowTempRow");
       highTemp.append(highInitial, highC, highF);
       lowTemp.append(lowInitial, lowC, lowF);
       highLowTempRow.append(highTemp, lowTemp);
+
+      const dayTemp = document.createElement("div");
+      dayTemp.setAttribute("class","dayTemp");
+      let hourTempArray = data.forecast.forecastday[0].hour;
+      console.log(hourTempArray);
+
       detailData.append(detailCity, tempRow, detailCond, highLowTempRow);
       itemTarget.append(detailData);
       itemTarget.querySelector(".goBack").classList.add("moveUp");
@@ -186,7 +208,7 @@ board.addEventListener("click", async (e) => {
     backBtn.remove();
     removeData.remove();
     board.style.overflow = "auto";
-    itemTarget.style.cursor = "pointer";
+    backTarget.style.cursor = "pointer";
   }
 });
 funcRow.append(deleteBtn, changeUnit);
